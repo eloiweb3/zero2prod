@@ -1,4 +1,5 @@
 use reqwest::Client;
+use tokio::net::TcpListener;
 use zero2prod::run;
 
 
@@ -17,7 +18,8 @@ async fn health_check_works() {
 
 
 fn spawn_app()  {
-    let server = zero2prod::run().expect("Failed to bind address");
+    let listener = TcpListener::bind("127.0.0.1:0").expect("Failed to bind random port");
+    let server = zero2prod::run("127.0.0.1:0").expect("Failed to bind address");
     // Launch the server as a background task
     // tokio::spawn returns a handle to the spawned future,
     // but we have no use for it here, hence the non-binding let
